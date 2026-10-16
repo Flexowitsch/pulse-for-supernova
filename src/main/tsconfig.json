@@ -1,0 +1,17 @@
+{
+	"compilerOptions": {
+		"composite": true,
+		"target": "ES2022",
+		"lib": ["ES2022"],
+		"module": "ESNext",
+		"moduleResolution": "bundler",
+		"strict": true,
+		"skipLibCheck": true,
+		"jsx": "react",
+		"jsxFactory": "figma.widget.h",
+		"jsxFragmentFactory": "figma.widget.Fragment",
+		"typeRoots": ["../../node_modules/@figma"],
+		"types": ["plugin-typings", "widget-typings"]
+	},
+	"include": ["**/*.ts", "**/*.tsx"]
+}

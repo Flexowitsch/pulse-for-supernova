@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" fill="none">
+	<title>Pulse for Supernova</title>
+	<rect width="128" height="128" rx="28" fill="#1A1A1A"/>
+	<g transform="translate(16 16) scale(4)" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
+		<path d="M19.4409 15C20.9155 13.2352 22 11.2744 22 9.378C22 6.408 19.588 4 16.616 4C14.656 4 13.192 5.228 12 6.606C10.81 5.226 9.344 4 7.384 4C4.41 4 2 6.408 2 9.378C2 11.2744 3.08448 13.2352 4.55913 15"/>
+		<path d="M2 19H8L10 15.1111L14 22.1111L16 19H22"/>
+	</g>
+</svg>

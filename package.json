@@ -1,0 +1,65 @@
+{
+	"name": "pulse-for-supernova",
+	"version": "1.0.0",
+	"description": "A Figma widget that shows the live health of any Supernova design system component on the canvas.",
+	"private": true,
+	"type": "module",
+	"license": "MIT",
+	"author": "Felix Pfahlert (https://www.linkedin.com/in/felix-pfahlert-1a7843b4/)",
+	"keywords": [
+		"figma",
+		"figma-widget",
+		"supernova",
+		"design-system",
+		"design-tokens"
+	],
+	"scripts": {
+		"dev": "plugma dev",
+		"build": "plugma build",
+		"typecheck": "tsc -p src/main/tsconfig.json --noEmit && tsc -p src/ui/tsconfig.json --noEmit",
+		"diagnose": "esbuild scripts/diagnose.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/pulse-diagnose.mjs --log-level=warning && node node_modules/.cache/pulse-diagnose.mjs",
+		"test": "esbuild src/main/supernova.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/pulse-test/supernova.mjs --log-level=warning && node --test test/*.test.mjs"
+	},
+	"devDependencies": {
+		"vite": "^7.3.6",
+		"@figma/plugin-typings": "^1.100.2",
+		"@figma/widget-typings": "^1.12.1",
+		"plugma": "^2.2.3",
+		"globals": "^15.11.0",
+		"@vitejs/plugin-react": "^4.3.3",
+		"@types/react": "^18.3.12",
+		"@types/react-dom": "^18.3.1",
+		"tslib": "^2.8.0",
+		"typescript": "~5.6.2"
+	},
+	"dependencies": {
+		"react": "^18.3.1",
+		"react-dom": "^18.3.1"
+	},
+	"plugma": {
+		"manifest": {
+			"documentAccess": "dynamic-page",
+			"api": "1.0.0",
+			"networkAccess": {
+				"allowedDomains": [
+					"https://api.supernova.io"
+				]
+			},
+			"id": "pulse-for-supernova",
+			"name": "Pulse for Supernova",
+			"main": "src/main/main.tsx",
+			"ui": "src/ui/ui.tsx",
+			"editorType": [
+				"figma",
+				"figjam"
+			],
+			"containsWidget": true,
+			"widgetApi": "1.0.0"
+		}
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Flexowitsch/pulse-for-supernova.git"
+	},
+	"homepage": "https://github.com/Flexowitsch/pulse-for-supernova#readme"
+}
