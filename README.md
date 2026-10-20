@@ -106,33 +106,30 @@ system has no published docs site, the button is hidden.
 ## Install
 
 Pulse isn't on the Figma Community yet. You need the **Figma desktop app**; the
-web app can't import widgets from a manifest. No Node.js or build step needed:
-the ready-to-import build is committed in [`dist/`](dist).
+web app can't import widgets from a manifest. **No Node.js and no build step:**
+the finished widget is already in the [`dist/`](dist) folder of this repo.
 
-### Clone and import (recommended, easiest to update)
+### Quick install: download and import `dist/`
 
-```bash
-git clone https://github.com/Flexowitsch/pulse-for-supernova.git
-```
+1. **Download** this repo: green **Code** button →
+   **[Download ZIP](https://github.com/Flexowitsch/pulse-for-supernova/archive/refs/heads/main.zip)**,
+   then unzip it. (Or `git clone https://github.com/Flexowitsch/pulse-for-supernova.git`.)
+2. **Import** in Figma: `Cmd/Ctrl + K` → **Import widget from manifest…** → pick
+   **`dist/manifest.json`** inside the downloaded folder.
+   (macOS: in the file dialog, `Cmd + Shift + G` lets you paste a path.)
+3. **Place** it from **Widgets → Development → Pulse for Supernova**.
 
-1. In Figma: `Cmd/Ctrl + K` → **Import widget from manifest…** → pick
-   **`pulse-for-supernova/dist/manifest.json`**.
-   (macOS: in the file dialog, `Cmd + Shift + G` lets you paste the path.)
-2. Place it from **Widgets → Development → Pulse for Supernova**.
+That's it. `dist/` holds the three files Figma needs: `manifest.json`,
+`main.js` and `ui.html`.
 
-**To update:**
+**To update:** download the ZIP again and import its `dist/manifest.json`, or,
+if you cloned, run `git pull` (Figma keeps pointing at the same file, so no
+re-import). Then remove the widget from the canvas and add it again so Figma
+loads the new build. The version is shown in the widget's footer.
 
-```bash
-cd pulse-for-supernova && git pull
-```
+### Alternative: only the widget files
 
-Figma keeps pointing at the same `dist/manifest.json`, so there is nothing to
-re-import. Remove the widget from the canvas and add it again so Figma loads the
-new build. The version is shown in the widget's footer.
-
-### Download a release
-
-Prefer no Git? Download `pulse-for-supernova-vX.Y.Z.zip` from the
+Want just the three files instead of the whole repo? Download `pulse-for-supernova-vX.Y.Z.zip` from the
 [latest release](https://github.com/Flexowitsch/pulse-for-supernova/releases/latest),
 unzip it, and import `pulse-for-supernova/manifest.json` the same way.
 
