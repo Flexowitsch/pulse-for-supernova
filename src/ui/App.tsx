@@ -375,7 +375,10 @@ const App = () => {
 					</div>
 				))}
 				<div style={{ marginBottom: 14 }}>
-					<label style={s.label}>Published docs site</label>
+					<label style={s.label}>
+						Published docs site
+						<span style={s.optionalTag}>Optional</span>
+					</label>
 					<input
 						type="text"
 						style={s.input}
@@ -389,7 +392,7 @@ const App = () => {
 						}}
 					/>
 					<div style={s.hint}>
-						Where "Open documentation" links to. Detected from Supernova; correct it if your docs live elsewhere.
+						Where "Open documentation" links to. Leave it empty to use the site Supernova reports; set it if your docs live elsewhere.
 					</div>
 				</div>
 				{definitions.length === 0 && (
@@ -579,6 +582,14 @@ const s: Record<string, React.CSSProperties> = {
 		cursor: 'pointer',
 		fontSize: 12,
 		whiteSpace: 'nowrap',
+	},
+	optionalTag: {
+		fontSize: 10,
+		fontWeight: 500,
+		padding: '1px 6px',
+		borderRadius: 4,
+		border: '1px solid var(--figma-color-border)',
+		color: 'var(--figma-color-text-secondary)',
 	},
 	badgeGood: { fontSize: 11, padding: '2px 8px', borderRadius: 4, background: '#D3FEDE', color: '#0E5C29' },
 	badgeBad: { fontSize: 10, padding: '2px 6px', borderRadius: 4, background: '#FFE5E5', color: '#A50000' },

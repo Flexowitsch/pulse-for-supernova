@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.1 — 2026-10-20
+
+- Setup: the **Published docs site** field is marked *Optional*.
+
 ## 1.2.0 — 2026-10-20
 
 - **Edit tile mapping** in the widget menu: change which property drives the
