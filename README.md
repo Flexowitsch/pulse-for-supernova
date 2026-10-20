@@ -106,34 +106,47 @@ system has no published docs site, the button is hidden.
 ## Install
 
 Pulse isn't on the Figma Community yet. You need the **Figma desktop app**; the
-web app can't import widgets from a manifest.
+web app can't import widgets from a manifest. No Node.js or build step needed:
+the ready-to-import build is committed in [`dist/`](dist).
 
-### Download (no build needed)
-
-1. Download `pulse-for-supernova-vX.Y.Z.zip` from the
-   [latest release](https://github.com/Flexowitsch/pulse-for-supernova/releases/latest)
-   and unzip it.
-2. In Figma: `Cmd/Ctrl + K` → **Import widget from manifest…** → pick
-   `pulse-for-supernova/manifest.json`.
-3. Place it from **Widgets → Development → Pulse for Supernova**.
-
-To update, download the new release, import its `manifest.json`, then remove
-the widget from the canvas and add it again so Figma loads the new build.
-
-### Build from source
-
-You need **Node.js 18+**.
+### Clone and import (recommended, easiest to update)
 
 ```bash
 git clone https://github.com/Flexowitsch/pulse-for-supernova.git
-cd pulse-for-supernova
-npm install
-npm run build
 ```
 
-Then import **`dist/manifest.json`** as above. The source manifest lives in
-`package.json` under `plugma.manifest`; the build generates the Figma-ready
-copy.
+1. In Figma: `Cmd/Ctrl + K` → **Import widget from manifest…** → pick
+   **`pulse-for-supernova/dist/manifest.json`**.
+   (macOS: in the file dialog, `Cmd + Shift + G` lets you paste the path.)
+2. Place it from **Widgets → Development → Pulse for Supernova**.
+
+**To update:**
+
+```bash
+cd pulse-for-supernova && git pull
+```
+
+Figma keeps pointing at the same `dist/manifest.json`, so there is nothing to
+re-import. Remove the widget from the canvas and add it again so Figma loads the
+new build. The version is shown in the widget's footer.
+
+### Download a release
+
+Prefer no Git? Download `pulse-for-supernova-vX.Y.Z.zip` from the
+[latest release](https://github.com/Flexowitsch/pulse-for-supernova/releases/latest),
+unzip it, and import `pulse-for-supernova/manifest.json` the same way.
+
+### Build from source
+
+Only needed if you change the code. You need **Node.js 18+**.
+
+```bash
+npm install
+npm run build   # writes dist/ — commit it together with your source change
+```
+
+The source manifest lives in `package.json` under `plugma.manifest`; the build
+generates the Figma-ready copy in `dist/`.
 
 ## Set up a widget
 
