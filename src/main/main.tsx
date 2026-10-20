@@ -1,5 +1,4 @@
 import {
-	codeLinkLabel,
 	detectDocsSite,
 	fetchCardData,
 	listComponentProperties,
@@ -17,7 +16,7 @@ const { widget } = figma;
 const { AutoLayout, Text, SVG, useSyncedState, usePropertyMenu, useEffect, useWidgetNodeId } = widget;
 
 // Shown in the widget footer so you can tell at a glance which build is running.
-const BUILD_VERSION = 'v1.3.1';
+const BUILD_VERSION = 'v1.3.2';
 
 // figma.clientStorage is per user and per machine: the token never travels
 // with the file. The last source is remembered so a second widget only asks
@@ -519,7 +518,7 @@ function Widget() {
 			    without docs, the code link takes the primary slot. */}
 			{/* Ternaries, not &&: the widget renderer rejects "" and false children. */}
 			{showDocs ? button(primaryLabel, 'primary', onPrimary) : null}
-			{codeUrl ? button(codeLinkLabel(codeUrl), showDocs ? 'secondary' : 'primary', () => openExternal(codeUrl)) : null}
+			{codeUrl ? button('Open code documentation', showDocs ? 'secondary' : 'primary', () => openExternal(codeUrl)) : null}
 
 			{/* Footer */}
 			<AutoLayout width="fill-parent" verticalAlignItems="center" spacing="auto">

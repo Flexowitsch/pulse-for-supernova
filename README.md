@@ -66,8 +66,8 @@ property during setup, and Pulse pre-selects the obvious matches.
 | **CODE** | `Repository` (URL or text) | any value is set |
 | **DOCS** | `Documentation link` (link to a page) | a documentation page is linked |
 
-If the CODE value is a link, the card also gets a button to it, named after
-where it leads (*Open in Storybook*, *Open on GitHub*, …). With a documentation
+If the CODE value is a link (e.g. to Storybook), the card also gets an
+**Open code documentation** button to it. With a documentation
 page it sits below the docs button as a secondary (outline) button; without one
 it becomes the primary button and the docs button is hidden.
 
