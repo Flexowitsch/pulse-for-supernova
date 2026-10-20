@@ -44,10 +44,10 @@ the slow call.
 
 **"Token expired" on a colleague's screen**
 Nothing is broken: their own token is missing or expired. They keep seeing the
-last synced status and can connect their own token via **Update token**.
+last synced status; clicking **Sync** asks them to connect their own token.
 
 **A tile stays grey although the value is set in Supernova**
-Check the mapping: widget menu → **Change design system** → *Map the tiles*.
+Check the mapping: widget menu → **Edit tile mapping**.
 Then **Sync**.
 
 **The status pill is grey for a status that means "fine"**

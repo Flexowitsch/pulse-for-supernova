@@ -39,3 +39,7 @@ CI runs the same three commands.
   Extend it with the response that caused your bug.
 - **Bump `BUILD_VERSION`** in `src/main/main.tsx` for every release; it's shown in
   the widget footer.
+- **Commit `dist/`.** It is the build people import, so run `npm run build` and
+  commit `dist/` with every source change. `npm run dev` writes a development
+  build into the same folder: never commit that one. CI fails if `dist/` doesn't
+  match a fresh build.

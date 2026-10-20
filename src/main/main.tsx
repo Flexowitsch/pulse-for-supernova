@@ -16,7 +16,7 @@ const { widget } = figma;
 const { AutoLayout, Text, SVG, useSyncedState, usePropertyMenu, useEffect, useWidgetNodeId } = widget;
 
 // Shown in the widget footer so you can tell at a glance which build is running.
-const BUILD_VERSION = 'v1.1.0';
+const BUILD_VERSION = 'v1.2.0';
 
 // figma.clientStorage is per user and per machine: the token never travels
 // with the file. The last source is remembered so a second widget only asks
@@ -133,7 +133,12 @@ function openExternal(url: string): Promise<void> {
 // ---- Setup UI orchestration -------------------------------------------------
 // The iframe only renders; every Supernova call runs here, in the main thread.
 type UIInitPayload =
-	| { mode: 'setup'; startAt: 'token' | 'source' | 'component'; source: SourceConfig | null; currentPid: string | null }
+	| {
+			mode: 'setup';
+			startAt: 'token' | 'source' | 'mapping' | 'component';
+			source: SourceConfig | null;
+			currentPid: string | null;
+	  }
 	| { mode: 'token-only' };
 
 async function respond(type: string, work: () => Promise<Record<string, unknown>>) {
@@ -233,8 +238,9 @@ function Widget() {
 		const token = (await figma.clientStorage.getAsync(TOKEN_KEY)) ?? '';
 		if (!token) {
 			// A colleague without a token: nothing is wrong with the card, they
-			// just can't refresh it.
+			// just can't refresh it. An explicit sync asks them to connect one.
 			if (!hasData) setMode('empty');
+			if (!silent) await openUI({ mode: 'token-only' });
 			return null;
 		}
 		// 'loading' is written to the document; an interrupted sync would leave
@@ -263,20 +269,23 @@ function Widget() {
 			}
 			if (!silent) {
 				figma.notify(
-					failure.reason === 'unauthorized' ? 'Token expired — update it to sync' : `Sync failed: ${failure.message}`,
+					failure.reason === 'unauthorized' ? 'Token expired — paste a fresh one to sync' : `Sync failed: ${failure.message}`,
 					{ error: true, timeout: 4000 },
 				);
+				// The token menu item is gone: an explicit sync with a rejected
+				// token is where a fresh one gets pasted.
+				if (failure.reason === 'unauthorized') await openUI({ mode: 'token-only' });
 			}
 			return null;
 		}
 	};
 
-	const openSetup = async (startAt: 'token' | 'source' | 'component') => {
+	const openSetup = async (startAt: 'token' | 'source' | 'mapping' | 'component') => {
 		const last = (await figma.clientStorage.getAsync(LAST_SOURCE_KEY)) as SourceConfig | undefined;
 		const known = source ?? last ?? null;
 		return openUI({
 			mode: 'setup',
-			startAt: startAt === 'component' && !known ? 'source' : startAt,
+			startAt: (startAt === 'component' || startAt === 'mapping') && !known ? 'source' : startAt,
 			source: known,
 			currentPid: data?.componentPersistentId ?? null,
 		});
@@ -299,8 +308,8 @@ function Widget() {
 					{ itemType: 'action', tooltip: 'Hard refresh (clear cache)', propertyName: 'hard' },
 					{ itemType: 'separator' },
 					{ itemType: 'action', tooltip: 'Change component', propertyName: 'component' },
+					{ itemType: 'action', tooltip: 'Edit tile mapping', propertyName: 'mapping' },
 					{ itemType: 'action', tooltip: 'Change design system', propertyName: 'source' },
-					{ itemType: 'action', tooltip: 'Update token', propertyName: 'token' },
 				]
 			: [{ itemType: 'action', tooltip: 'Set up', propertyName: 'setup' }],
 		({ propertyName }) => {
@@ -312,9 +321,9 @@ function Widget() {
 				setMode('empty');
 				return pid ? refresh({ pid }).then(() => {}) : Promise.resolve();
 			}
-			if (propertyName === 'token') return openUI({ mode: 'token-only' });
 			if (propertyName === 'source') return openSetup('source');
 			if (propertyName === 'component') return openSetup('component');
+			if (propertyName === 'mapping') return openSetup('mapping');
 			return openSetup('token');
 		},
 	);
