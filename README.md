@@ -240,9 +240,13 @@ test/                   node:test suite against a mocked Supernova API
 
 ## Background
 
-Pulse started as an internal widget for a design system team that documents its
-components in Supernova, where it sits on over a hundred component pages. This
-is an open rewrite with nothing tied to that team's design system.
+Pulse was created as part of my work at [EGYM](https://www.egym.com), where it
+started as an internal widget for a design system team that documents its
+components in Supernova. There it sits on over a hundred component pages.
+
+This repository is an open rewrite with nothing tied to that design system: it
+works with any Supernova account. It may move to an EGYM organisation on GitHub
+later.
 
 ## License
 

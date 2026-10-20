@@ -45,6 +45,7 @@ const App = () => {
 	const [payload, setPayload] = useState<InitPayload | null>(null);
 	const [step, setStep] = useState<Step>('token');
 	const [token, setToken] = useState('');
+	const [showToken, setShowToken] = useState(false);
 	const [tokenStatus, setTokenStatus] = useState<'unknown' | 'valid' | 'invalid'>('unknown');
 	const [userName, setUserName] = useState('');
 	const [loading, setLoading] = useState(false);
@@ -244,18 +245,31 @@ const App = () => {
 					Supernova API token
 					{tokenStatus === 'invalid' && <span style={s.badgeBad}>Invalid</span>}
 				</label>
-				<input
-					type="password"
-					value={token}
-					placeholder="Paste token"
-					onChange={(e) => {
-						setToken(e.target.value);
-						setTokenStatus('unknown');
-					}}
-					onKeyDown={(e) => e.key === 'Enter' && submitToken()}
-					style={s.input}
-					autoFocus
-				/>
+				<div style={s.secretField}>
+					<input
+						type={showToken ? 'text' : 'password'}
+						value={token}
+						placeholder="Paste token"
+						onChange={(e) => {
+							setToken(e.target.value);
+							setTokenStatus('unknown');
+						}}
+						onKeyDown={(e) => e.key === 'Enter' && submitToken()}
+						style={{ ...s.input, marginBottom: 0, paddingRight: 56 }}
+						autoComplete="off"
+						spellCheck={false}
+						autoFocus
+					/>
+					<button
+						type="button"
+						style={s.revealBtn}
+						onClick={() => setShowToken((v) => !v)}
+						aria-label={showToken ? 'Hide token' : 'Show token'}
+						aria-pressed={showToken}
+					>
+						{showToken ? 'Hide' : 'Show'}
+					</button>
+				</div>
 				<div style={s.hint}>
 					Create a personal access token in your Supernova profile settings. Read access is enough. It is
 					stored in Figma's local storage on this device only and never written into the file.
@@ -477,6 +491,18 @@ const s: Record<string, React.CSSProperties> = {
 		background: 'var(--figma-color-bg-secondary)',
 		color: 'var(--figma-color-text)',
 		marginBottom: 6,
+	},
+	secretField: { position: 'relative', marginBottom: 6 },
+	revealBtn: {
+		position: 'absolute',
+		top: 0,
+		right: 0,
+		height: '100%',
+		padding: '0 10px',
+		fontSize: 11,
+		fontWeight: 600,
+		color: 'var(--figma-color-text-secondary)',
+		cursor: 'pointer',
 	},
 	hint: { fontSize: 11, color: 'var(--figma-color-text-secondary)', marginBottom: 4, lineHeight: 1.45 },
 	list: {
