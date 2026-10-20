@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.3.0 — 2026-10-20
+## 1.3.1 — 2026-10-20
 
 - **Code button:** when the CODE property holds a link (Storybook, GitHub,
   GitLab or any URL), the card shows a button to it, named after where it

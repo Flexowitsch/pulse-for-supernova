@@ -17,7 +17,7 @@ const { widget } = figma;
 const { AutoLayout, Text, SVG, useSyncedState, usePropertyMenu, useEffect, useWidgetNodeId } = widget;
 
 // Shown in the widget footer so you can tell at a glance which build is running.
-const BUILD_VERSION = 'v1.3.0';
+const BUILD_VERSION = 'v1.3.1';
 
 // figma.clientStorage is per user and per machine: the token never travels
 // with the file. The last source is remembered so a second widget only asks
@@ -434,9 +434,7 @@ function Widget() {
 			<AutoLayout
 				width="fill-parent"
 				fill={kind === 'primary' ? COLORS.buttonBg : COLORS.cardBg}
-				stroke={kind === 'secondary' ? COLORS.buttonBg : undefined}
-				strokeWidth={kind === 'secondary' ? 1.5 : 0}
-				strokeAlign="inside"
+				{...(kind === 'secondary' ? { stroke: COLORS.buttonBg, strokeWidth: 1.5, strokeAlign: 'inside' as const } : {})}
 				cornerRadius={999}
 				padding={{ vertical: 18, horizontal: 24 }}
 				horizontalAlignItems="center"
@@ -519,8 +517,9 @@ function Widget() {
 
 			{/* Actions — only when the click leads somewhere useful. Docs come first;
 			    without docs, the code link takes the primary slot. */}
-			{showDocs && button(primaryLabel, 'primary', onPrimary)}
-			{codeUrl && button(codeLinkLabel(codeUrl), showDocs ? 'secondary' : 'primary', () => openExternal(codeUrl))}
+			{/* Ternaries, not &&: the widget renderer rejects "" and false children. */}
+			{showDocs ? button(primaryLabel, 'primary', onPrimary) : null}
+			{codeUrl ? button(codeLinkLabel(codeUrl), showDocs ? 'secondary' : 'primary', () => openExternal(codeUrl)) : null}
 
 			{/* Footer */}
 			<AutoLayout width="fill-parent" verticalAlignItems="center" spacing="auto">
