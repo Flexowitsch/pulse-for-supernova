@@ -3,6 +3,7 @@
 import { test, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
 import {
+	codeLinkLabel,
 	fetchCardData,
 	listDesignSystems,
 	normalizeStatus,
@@ -134,6 +135,25 @@ test('select values resolve to option names; the newer value shape is read too',
 	assert.equal(card.statusVariant, 'danger');
 	assert.equal(card.codeReady, false);
 	assert.equal(card.openUrl, 'https://acme.supernova-docs.io/latest/components/button-IjKl9012');
+});
+
+test('a URL in the CODE property becomes the code link; text does not', async () => {
+	routes['design-systems/1/versions/draft/element-properties/values'].values.push(
+		{ targetElementPersistentId: 'divider', definitionPersistentId: 'p-repo', stringValue: 'Not in code yet, see ticket' },
+	);
+	assert.equal((await fetchCardData('t', config, 'alert')).codeUrl, 'https://github.com/acme/alert');
+	const divider = await fetchCardData('t', config, 'divider');
+	assert.equal(divider.codeReady, true);
+	assert.equal(divider.codeUrl, '');
+	assert.equal((await fetchCardData('t', config, 'button')).codeUrl, '');
+});
+
+test('code buttons are named after where they lead', () => {
+	assert.equal(codeLinkLabel('https://storybook.acme.dev/?path=/docs/button'), 'Open in Storybook');
+	assert.equal(codeLinkLabel('https://main--abc.chromatic.com/'), 'Open in Storybook');
+	assert.equal(codeLinkLabel('https://github.com/acme/alert'), 'Open on GitHub');
+	assert.equal(codeLinkLabel('https://gitlab.acme.dev/ui/alert'), 'Open on GitLab');
+	assert.equal(codeLinkLabel('https://acme.dev/code/alert'), 'Open code');
 });
 
 test('no documentation link means no button target', async () => {

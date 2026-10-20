@@ -58,6 +58,8 @@ export interface CardData {
 	docsReady: boolean;
 	/** Published docs page; empty when the design system has no docs site. */
 	openUrl: string;
+	/** Link from the CODE property (Storybook, repository …); empty when it isn't a URL. */
+	codeUrl: string;
 	syncedAt: number;
 }
 
@@ -434,6 +436,14 @@ function extractString(v: unknown): string | undefined {
 	return undefined;
 }
 
+/** Button label for a CODE link, named after where it leads. */
+export function codeLinkLabel(url: string): string {
+	if (/storybook|chromatic\.com/i.test(url)) return 'Open in Storybook';
+	if (/github\.com/i.test(url)) return 'Open on GitHub';
+	if (/gitlab\./i.test(url)) return 'Open on GitLab';
+	return 'Open code';
+}
+
 export async function fetchCardData(token: string, config: SourceConfig, componentPid: string): Promise<CardData> {
 	const dsId = config.designSystemId;
 	const working = await workingVersion(token, dsId);
@@ -457,7 +467,9 @@ export async function fetchCardData(token: string, config: SourceConfig, compone
 	const statusName = statusDef?.options.find((o) => o.id === rawStatus)?.name ?? rawStatus;
 	const { label, variant, designReady } = normalizeStatus(statusName);
 
-	const codeReady = !!extractString(valueFor(values, componentPid, repository));
+	const codeValue = extractString(valueFor(values, componentPid, repository));
+	const codeReady = !!codeValue;
+	const codeUrl = codeValue && /^https?:\/\//i.test(codeValue) ? codeValue : '';
 	const linkPid = extractString(valueFor(values, componentPid, documentationLink));
 	const openUrl = linkPid ? await resolveOpenUrl(token, dsId, working, linkPid, config.docsUrl) : null;
 
@@ -471,6 +483,7 @@ export async function fetchCardData(token: string, config: SourceConfig, compone
 		codeReady,
 		docsReady: !!linkPid,
 		openUrl: openUrl ?? '',
+		codeUrl,
 		syncedAt: Date.now(),
 	};
 }

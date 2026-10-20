@@ -1,4 +1,5 @@
 import {
+	codeLinkLabel,
 	detectDocsSite,
 	fetchCardData,
 	listComponentProperties,
@@ -16,7 +17,7 @@ const { widget } = figma;
 const { AutoLayout, Text, SVG, useSyncedState, usePropertyMenu, useEffect, useWidgetNodeId } = widget;
 
 // Shown in the widget footer so you can tell at a glance which build is running.
-const BUILD_VERSION = 'v1.2.1';
+const BUILD_VERSION = 'v1.3.0';
 
 // figma.clientStorage is per user and per machine: the token never travels
 // with the file. The last source is remembered so a second widget only asks
@@ -423,6 +424,34 @@ function Widget() {
 		await openExternal(url);
 	};
 
+	const showDocs = !hasData || (data.docsReady && !!data.openUrl);
+	// Widgets synced by an older build have no codeUrl yet.
+	const codeUrl = hasData ? (data.codeUrl ?? '') : '';
+
+	const button = (label: string, kind: 'primary' | 'secondary', onClick: () => Promise<void> | void) => {
+		const fg = kind === 'primary' ? COLORS.buttonFg : COLORS.buttonBg;
+		return (
+			<AutoLayout
+				width="fill-parent"
+				fill={kind === 'primary' ? COLORS.buttonBg : COLORS.cardBg}
+				stroke={kind === 'secondary' ? COLORS.buttonBg : undefined}
+				strokeWidth={kind === 'secondary' ? 1.5 : 0}
+				strokeAlign="inside"
+				cornerRadius={999}
+				padding={{ vertical: 18, horizontal: 24 }}
+				horizontalAlignItems="center"
+				verticalAlignItems="center"
+				spacing={8}
+				onClick={onClick}
+			>
+				<Text fill={fg} fontFamily="Inter" fontSize={18} fontWeight={500}>
+					{label}
+				</Text>
+				<SVG src={ARROW_NE_SVG(fg)} />
+			</AutoLayout>
+		);
+	};
+
 	const onPrimary = () => {
 		if (hasData) return openDocs();
 		if (mode === 'unauthorized') return openUI({ mode: 'token-only' });
@@ -488,24 +517,10 @@ function Widget() {
 				</Text>
 			</AutoLayout>
 
-			{/* Primary action — only when the click leads somewhere useful */}
-			{(!hasData || (data.docsReady && !!data.openUrl)) && (
-				<AutoLayout
-					width="fill-parent"
-					fill={COLORS.buttonBg}
-					cornerRadius={999}
-					padding={{ vertical: 18, horizontal: 24 }}
-					horizontalAlignItems="center"
-					verticalAlignItems="center"
-					spacing={8}
-					onClick={onPrimary}
-				>
-					<Text fill={COLORS.buttonFg} fontFamily="Inter" fontSize={18} fontWeight={500}>
-						{primaryLabel}
-					</Text>
-					<SVG src={ARROW_NE_SVG(COLORS.buttonFg)} />
-				</AutoLayout>
-			)}
+			{/* Actions — only when the click leads somewhere useful. Docs come first;
+			    without docs, the code link takes the primary slot. */}
+			{showDocs && button(primaryLabel, 'primary', onPrimary)}
+			{codeUrl && button(codeLinkLabel(codeUrl), showDocs ? 'secondary' : 'primary', () => openExternal(codeUrl))}
 
 			{/* Footer */}
 			<AutoLayout width="fill-parent" verticalAlignItems="center" spacing="auto">

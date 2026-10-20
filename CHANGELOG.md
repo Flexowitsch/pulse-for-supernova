@@ -1,7 +1,12 @@
 # Changelog
 
-## 1.2.1 — 2026-10-20
+## 1.3.0 — 2026-10-20
 
+- **Code button:** when the CODE property holds a link (Storybook, GitHub,
+  GitLab or any URL), the card shows a button to it, named after where it
+  leads. With a documentation page it's a secondary (outline) button below
+  *Open documentation in Supernova*; without one it becomes the primary button
+  and the documentation button is hidden.
 - Setup: the **Published docs site** field is marked *Optional*.
 
 ## 1.2.0 — 2026-10-20

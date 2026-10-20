@@ -40,7 +40,7 @@ type Step = 'token' | 'source' | 'mapping' | 'component';
 
 const SIGNALS: Array<{ key: SignalKey; tile: string; help: string }> = [
 	{ key: 'status', tile: 'DESIGN', help: 'Status property. A "Healthy"/"Ready"/"Stable" value turns the tile green.' },
-	{ key: 'repository', tile: 'CODE', help: 'Repository or Storybook link. Any value turns the tile green.' },
+	{ key: 'repository', tile: 'CODE', help: 'Storybook or repository link. Any value turns the tile green; a link also adds a button to it.' },
 	{ key: 'documentationLink', tile: 'DOCS', help: 'Link to the documentation page. Also powers the "Open" button.' },
 ];
 
