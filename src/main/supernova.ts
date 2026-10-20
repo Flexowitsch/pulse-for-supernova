@@ -436,14 +436,6 @@ function extractString(v: unknown): string | undefined {
 	return undefined;
 }
 
-/** Button label for a CODE link, named after where it leads. */
-export function codeLinkLabel(url: string): string {
-	if (/storybook|chromatic\.com/i.test(url)) return 'Open in Storybook';
-	if (/github\.com/i.test(url)) return 'Open on GitHub';
-	if (/gitlab\./i.test(url)) return 'Open on GitLab';
-	return 'Open code';
-}
-
 export async function fetchCardData(token: string, config: SourceConfig, componentPid: string): Promise<CardData> {
 	const dsId = config.designSystemId;
 	const working = await workingVersion(token, dsId);

@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.2 — 2026-10-20
+
+- The code button always reads **Open code documentation**.
+
 ## 1.3.1 — 2026-10-20
 
 - **Code button:** when the CODE property holds a link (Storybook, GitHub,
