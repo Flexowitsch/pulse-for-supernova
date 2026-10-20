@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.0 — 2026-10-20
+
+- **Show/Hide button** on the token field. The token stays masked by default.
+- README: background on where Pulse comes from.
+
 ## 1.0.0 — 2026-10-16
 
 First public release: an open rewrite of an internal widget, with nothing tied to

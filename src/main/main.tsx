@@ -16,7 +16,7 @@ const { widget } = figma;
 const { AutoLayout, Text, SVG, useSyncedState, usePropertyMenu, useEffect, useWidgetNodeId } = widget;
 
 // Shown in the widget footer so you can tell at a glance which build is running.
-const BUILD_VERSION = 'v1.0.0';
+const BUILD_VERSION = 'v1.1.0';
 
 // figma.clientStorage is per user and per machine: the token never travels
 // with the file. The last source is remembered so a second widget only asks
