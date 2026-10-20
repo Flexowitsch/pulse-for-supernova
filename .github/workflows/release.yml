@@ -1,0 +1,35 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+      - name: Package widget
+        run: |
+          mkdir -p pkg/pulse-for-supernova
+          cp dist/manifest.json dist/main.js dist/ui.html pkg/pulse-for-supernova/
+          cd pkg && zip -r "../pulse-for-supernova-${GITHUB_REF_NAME}.zip" pulse-for-supernova
+      - name: Attach to release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            gh release upload "$GITHUB_REF_NAME" "pulse-for-supernova-${GITHUB_REF_NAME}.zip" --clobber
+          else
+            gh release create "$GITHUB_REF_NAME" "pulse-for-supernova-${GITHUB_REF_NAME}.zip" --generate-notes
+          fi

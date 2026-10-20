@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- **Download install:** every release ships a ready-to-import zip
+  (`manifest.json`, `main.js`, `ui.html`), built by a release workflow on each
+  `v*` tag. No Node.js needed to install.
+
 ## 1.1.0 — 2026-10-20
 
 - **Show/Hide button** on the token field. The token stays masked by default.
