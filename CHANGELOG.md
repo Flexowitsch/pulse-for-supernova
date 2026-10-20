@@ -1,10 +1,15 @@
 # Changelog
 
-## Unreleased
+## 1.2.0 — 2026-10-20
 
-- **Download install:** every release ships a ready-to-import zip
-  (`manifest.json`, `main.js`, `ui.html`), built by a release workflow on each
-  `v*` tag. No Node.js needed to install.
+- **Edit tile mapping** in the widget menu: change which property drives the
+  DESIGN, CODE and DOCS tiles (and the docs site) without redoing setup or
+  picking the component again.
+- **Update token** removed from the menu. Without a valid token, **Sync** opens
+  the token dialog instead.
+- **Install without building:** the ready-to-import build is committed in
+  `dist/`, so `git clone` installs and `git pull` updates. CI fails if `dist/`
+  is out of date. Every release also ships the same three files as a zip.
 
 ## 1.1.0 — 2026-10-20
 

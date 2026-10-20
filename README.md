@@ -151,7 +151,8 @@ Pulse remembers your token and your last design system, so every widget after
 the first only asks for the component.
 
 **Widget menu** (select the widget): Sync · Hard refresh · Change component ·
-Change design system · Update token.
+Edit tile mapping · Change design system. Without a valid token, **Sync** asks
+for a fresh one.
 
 ## Prepare your design system in Supernova
 
@@ -195,7 +196,7 @@ green card:
 | Symptom | Fix |
 | --- | --- |
 | `SyntaxError: expecting '('` or *widget missing call to figma.widget.register* | You imported a source manifest. Remove the widget under *Manage plugins and widgets in development* and import `dist/manifest.json`. |
-| "Token expired" | Widget menu → **Update token**, paste a fresh token. |
+| "Token expired" | Click **Sync** and paste a fresh token. |
 | A design system is missing from the list | Enter its ID in the setup's *Not listed?* field. |
 | *Open documentation* lands on a login screen | The docs domain is wrong. Widget menu → **Change design system**, correct **Published docs site**. |
 | A tile stays grey although the value is set | The tile is mapped to a different property. Widget menu → **Change design system** and check the mapping. |

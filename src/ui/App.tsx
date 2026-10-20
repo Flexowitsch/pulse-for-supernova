@@ -28,7 +28,12 @@ interface ComponentSummary {
 }
 
 type InitPayload =
-	| { mode: 'setup'; startAt: 'token' | 'source' | 'component'; source: SourceConfig | null; currentPid: string | null }
+	| {
+			mode: 'setup';
+			startAt: 'token' | 'source' | 'mapping' | 'component';
+			source: SourceConfig | null;
+			currentPid: string | null;
+	  }
 	| { mode: 'token-only' };
 
 type Step = 'token' | 'source' | 'mapping' | 'component';
@@ -86,8 +91,19 @@ const App = () => {
 			send({ type: 'submit', token: tokenRef.current });
 			return;
 		}
-		goTo(p?.mode === 'setup' && p.startAt === 'component' && sourceRef.current ? 'component' : 'source');
+		const src = sourceRef.current;
+		if (p?.mode === 'setup' && p.startAt === 'mapping' && src) {
+			// Straight to the mapping step; the properties result keeps the current mapping.
+			setLoading(true);
+			send({ type: 'list-properties', token: tokenRef.current, designSystemId: src.designSystemId });
+			return;
+		}
+		goTo(p?.mode === 'setup' && p.startAt === 'component' && src ? 'component' : 'source');
 	};
+
+	// Opened via "Edit tile mapping" on a configured widget: save the mapping
+	// without picking the component again.
+	const editingMapping = payload?.mode === 'setup' && payload.startAt === 'mapping' && !!payload.currentPid;
 
 	useEffect(() => {
 		const onMessage = (event: MessageEvent) => {
@@ -217,7 +233,9 @@ const App = () => {
 			? ['Update Supernova token', 'Paste a fresh API token to restore the live connection.']
 			: ['Connect Supernova', 'Paste your Supernova API token. It stays on this device.'],
 		source: ['Pick a design system', userName ? `Signed in as ${userName}.` : 'Every design system your token can read.'],
-		mapping: ['Map the tiles', 'Which component property drives each tile? We pre-selected the likely ones.'],
+		mapping: editingMapping
+			? ['Edit tile mapping', source ? `Which property of ${source.designSystemName} drives each tile?` : '']
+			: ['Map the tiles', 'Which component property drives each tile? We pre-selected the likely ones.'],
 		component: ['Pick a component', source ? `From ${source.designSystemName}.` : ''],
 	};
 	const [title, subtitle] = header[step];
@@ -379,7 +397,11 @@ const App = () => {
 				)}
 			</>
 		);
-		primary = (
+		primary = editingMapping ? (
+			<button style={s.primaryBtn} onClick={onSave}>
+				Save
+			</button>
+		) : (
 			<button style={s.primaryBtn} onClick={() => goTo('component')}>
 				Continue
 			</button>
